@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         GreaterGood CTG AutoClicker
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program.
 // @author       Rsge
 // @include      https://greatergood.com/clicktogive/*
@@ -16,6 +16,7 @@
     const sites = [" Hunger", " Breast Cancer", " Animals", " Veterans", " Autism", " Alzheimer's",
         " Diabetes", " Literacy", " Rainforest", " GreaterGood"]
 
+    // On button site, click button
     var i;
     var buttons = document.getElementsByTagName("BUTTON");
     for (i = 0; i < buttons.length; i++) {
@@ -27,6 +28,7 @@
         }
     }
 
+    // On thanks site, choose new site if not all are already clicked
     var divs = document.getElementsByTagName("DIV");
     for (i = 0; i < divs.length; i++) {
         var divClass = divs[i].className;
@@ -40,4 +42,7 @@
             return;
         }
     }
+
+    // Wait for 3 h, then reload page to click through again
+    setTimeout(function(){location.reload(true);}, 10800000);
 })();
