@@ -1,13 +1,14 @@
 // ==UserScript==
+// @namespace    https://github.com/Rsge
 // @name         GreaterGood CTG AutoClicker
-// @namespace    http://tampermonkey.net/
-// @version      0.2
 // @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program.
+// @version      0.3
 // @author       Rsge
 // @include      https://greatergood.com/clicktogive/*
 // @include      https://*.greatergood.com/clicktogive/*
 // @icon         https://www.google.com/s2/favicons?domain=greatergood.com
 // @grant        none
+// @run-at       document-start
 // ==/UserScript==
 
 (function () {
