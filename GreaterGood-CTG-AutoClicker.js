@@ -4,7 +4,7 @@
 // @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every three hours.
 // @description:de Klickt sich automatisch alle 3 Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version      1.0
+// @version      1.1
 // @author       Rsge
 // @copyright    2021+, Jan G. (Rsge)
 // @license      Mozilla Public License 2.0
@@ -55,5 +55,5 @@
     }
 
     // Wait for 3 h, then reload page to click through again
-    setTimeout(function(){location.reload(true);}, 10800000);
+    setTimeout(function(){location.reload(true);}, 10860000);
 })();
