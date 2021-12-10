@@ -1,10 +1,10 @@
 // ==UserScript==
 // @name         GreaterGood CTG AutoClicker
 
-// @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every three hours.
-// @description:de Klickt sich automatisch alle 3 Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
+// @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
+// @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version      1.1
+// @version      1.2
 // @author       Rsge
 // @copyright    2021+, Jan G. (Rsge)
 // @license      Mozilla Public License 2.0
@@ -54,6 +54,6 @@
         }
     }
 
-    // Wait for 3 h, then reload page to click through again
-    setTimeout(function(){location.reload(true);}, 10860000);
+    // Wait for 2 h, then reload page to click through again
+    setTimeout(function(){location.reload(true);}, 7260000);
 })();
