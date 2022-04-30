@@ -4,4 +4,4 @@ It automatically clicks through all the buttons on all subsites of the *GreaterG
 
 It starts on any of the subsites and works through the complete list, starting at the top left to the bottom right, leaving out the two changing external links besides the main *GreaterGood* site link.
 
-It uses the *click*-action on the buttons, so they're correctly counted as clicked, and also works in the background.
+It uses the *click*-action on the button with a random delay after page loads, so they're correctly counted as clicked, and also works in the background.

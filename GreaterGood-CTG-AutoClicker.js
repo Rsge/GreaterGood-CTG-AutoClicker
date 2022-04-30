@@ -4,7 +4,7 @@
 // @description  Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version      1.2
+// @version      1.3
 // @author       Rsge
 // @copyright    2021+, Jan G. (Rsge)
 // @license      Mozilla Public License 2.0
@@ -14,9 +14,10 @@
 // @homepageURL  https://github.com/Rsge/GreaterGood-CTG-AutoClicker
 // @supportURL   https://github.com/Rsge/GreaterGood-CTG-AutoClicker/issues
 
-
-// @include      https://greatergood.com/clicktogive/*
-// @include      https://*.greatergood.com/clicktogive/*
+// @match      https://greatergood.com/clicktogive/*
+// @match      https://greatergood.com/ClickToGive/*
+// @match      https://*.greatergood.com/clicktogive/*
+// @match      https://*.greatergood.com/ClickToGive/*
 
 // @grant        none
 // ==/UserScript==
@@ -24,19 +25,34 @@
 (function () {
     'use strict';
 
-    const sites = [" Hunger", " Breast Cancer", " Animals", " Veterans", " Autism", " Alzheimer's",
-        " Diabetes", " Literacy", " Rainforest", " GreaterGood"]
+    // Max amount of seconds to wait before clicking button
+    const MAX_RANDOM_TO_CLICK_SECONDS = 3;
+    // Minutes between possible click-throughs
+    // Set to at least 1 min more than minimum time because of random button click delay
+    const INTERVAL_MINUTES = 121;
+
+
+    // Click-To-Give site options
+    const SITES = [" Hunger", " Breast Cancer", " Animals", " Veterans", " Autism", " Alzheimer's",
+        " Diabetes", " Literacy", " Rainforest", " GreaterGood"];
+
 
     // On button site, click button
     var i;
     var buttons = document.getElementsByTagName("BUTTON");
+    var buttonFound = false
     for (i = 0; i < buttons.length; i++) {
         var buttonHTML = buttons[i].innerHTML;
         //console.log(buttonHTML);
         if (buttonHTML == "Click to Give - it's FREE!") {
-            buttons[i].click();
-            return;
+            buttonFound = true
+            break
         }
+    }
+    if (buttonFound) {
+        var millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
+        setTimeout(function(){buttons[i].click()}, millisecondsToClick);
+        return;
     }
 
     // On thanks site, choose new site if not all are already clicked
@@ -46,7 +62,7 @@
         //console.log(divClass);
         if (divClass.includes("-site col-xs-3 col-sm-4 button-to-count") &&
             !divClass.includes("click-more-clickAttempted") &&
-            sites.includes(divs[i].innerText)) {
+            SITES.includes(divs[i].innerText)) {
             var link = divs[i].firstElementChild.href;
             //console.log(link);
             window.open(link, "_top");
@@ -55,5 +71,6 @@
     }
 
     // Wait for 2 h, then reload page to click through again
-    setTimeout(function(){location.reload(true);}, 7260000);
+    var intervalMilliseconds = INTERVAL_MINUTES * 60 * 1000;
+    setTimeout(function(){location.reload(true);}, intervalMilliseconds);
 })();
