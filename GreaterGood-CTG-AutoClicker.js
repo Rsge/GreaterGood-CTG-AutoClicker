@@ -4,8 +4,7 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        1.4.2
-// @author         Rsge
+// @version        1.4.3
 // @copyright      2021+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
@@ -13,13 +12,16 @@
 // @namespace      https://github.com/Rsge
 // @homepageURL    https://github.com/Rsge/GreaterGood-CTG-AutoClicker
 // @supportURL     https://github.com/Rsge/GreaterGood-CTG-AutoClicker/issues
+// @updateURL      https://greasyfork.org/scripts/433055-greatergood-ctg-autoclicker/code/GreaterGood%20CTG%20AutoClicker.user.js
+// @downloadURL    https://greasyfork.org/scripts/433055-greatergood-ctg-autoclicker/code/GreaterGood%20CTG%20AutoClicker.user.js
 
 // @match          https://greatergood.com/clicktogive/*
 // @match          https://greatergood.com/clickToGive/*
 // @match          https://*.greatergood.com/clicktogive/*
 // @match          https://*.greatergood.com/clickToGive/*
 
-// @grant        none
+// @run-at         document-idle
+// @grant          none
 // ==/UserScript==
 
 (function () {
