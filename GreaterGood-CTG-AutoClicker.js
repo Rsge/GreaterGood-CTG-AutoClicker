@@ -4,8 +4,8 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        1.4.3
-// @copyright      2021+, Jan G. (Rsge)
+// @version        2.0.0
+// @copyright      2023+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
 
@@ -25,54 +25,50 @@
 // ==/UserScript==
 
 (function () {
-    'use strict';
+  'use strict';
 
-    // Max amount of seconds to wait before clicking button
-    const MAX_RANDOM_TO_CLICK_SECONDS = 3;
-    // Minutes between possible click-throughs
-    // Set to at least 1 min more than minimum time because of random button click delay
-    const INTERVAL_MINUTES = 121;
-
-
-    // Click-To-Give site options
-    const SITES = [" Hunger", " Breast Cancer", " Animals", " Veterans", " Autism", " Alzheimer's",
-        " Diabetes", " Literacy", " Rainforest", " GreaterGood"];
+  // Max amount of seconds to wait before clicking button
+  const MAX_RANDOM_TO_CLICK_SECONDS = 3;
+  // Minutes between possible click-throughs
+  const INTERVAL_MINUTES = 120;
 
 
-    // On button site, click button
-    var i;
-    var buttons = document.getElementsByTagName("BUTTON");
-    var buttonFound = false;
-    for (i = 0; i < buttons.length; i++) {
-        var buttonHTML = buttons[i].innerHTML;
-        //console.log(buttonHTML);
-        if (buttonHTML == "Click to Give - it's FREE!") {
-            buttonFound = true;
-            break;
-        }
+  // On button site, click button.
+  var i;
+  var buttons = document.getElementsByTagName("BUTTON");
+  var buttonFound = false;
+  for (i = 0; i < buttons.length; i++) {
+    var buttonHTML = buttons[i].innerHTML;
+    //console.log(buttonHTML);
+    if (buttonHTML == "Click to Give - it's FREE!") {
+      buttonFound = true;
+      break;
     }
-    if (buttonFound) {
-        var millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
-        setTimeout(function(){buttons[i].click()}, millisecondsToClick);
-        return;
-    }
+  }
+  if (buttonFound) {
+    var millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
+    setTimeout(function(){buttons[i].click()}, millisecondsToClick);
+    return;
+  }
 
-    // On thanks site, choose new site if not all are already clicked
-    var divs = document.getElementsByTagName("DIV");
-    for (i = 0; i < divs.length; i++) {
-        var divClass = divs[i].className;
-        //console.log(divClass);
-        if (divClass.includes("-site col-xs-4 button-to-count") &&
-            !divClass.includes("click-more-clickAttempted") &&
-            SITES.includes(divs[i].innerText)) {
-            var link = divs[i].firstElementChild.href;
-            //console.log(link);
-            window.open(link, "_top");
-            return;
-        }
+  // On thanks site, choose new site if not all are already clicked.
+  var links = document.getElementsByTagName("A");
+  for (i = 0; i < links.length; i++) {
+    var linkClass = links[i].className;
+    //console.log(linkClass);
+    var linkValue = links[i].attributes[0].value;
+    //console.log(linkValue);
+    if (linkClass.includes("-site col-4 button-to-count")
+        && !linkClass.includes("click-more-clickAttempted")
+        && linkValue.startsWith("/clicktogive/")) {
+      var link = links[i].href;
+      //console.log(link);
+      window.open(link, "_top");
+      return;
     }
+  }
 
-    // Wait for 2 h, then reload page to click through again
-    var intervalMilliseconds = INTERVAL_MINUTES * 60 * 1000;
-    setTimeout(function(){location.reload(true);}, intervalMilliseconds);
+  // Wait for 2 h, then reload page to click through again.
+  var intervalMilliseconds = (INTERVAL_MINUTES + 1) * 60 * 1000;
+  setTimeout(function(){location.reload(true);}, intervalMilliseconds);
 })();
