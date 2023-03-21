@@ -5,7 +5,7 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        2.0.3
+// @version        2.1.0
 // @copyright      2023+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
@@ -57,7 +57,12 @@
   for (i = 0; i < links.length; i++) {
     var linkClass = links[i].className;
     //console.log(linkClass);
-    var linkValue = links[i].attributes[0].value;
+    var linkAttributes = links[i].attributes[0]
+    //console.log(linkAttributes);
+    if (linkAttributes === undefined) {
+      continue;
+    }
+    var linkValue = linkAttributes.value;
     //console.log(linkValue);
     if (linkClass.includes("-site col-4 button-to-count")
         && !linkClass.includes("click-more-clickAttempted")
