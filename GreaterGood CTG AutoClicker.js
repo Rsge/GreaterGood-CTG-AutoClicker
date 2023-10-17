@@ -5,7 +5,7 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        2.1.0
+// @version        2.1.1
 // @copyright      2023+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
@@ -35,11 +35,11 @@
 
 
   // On button site, click button.
-  var i;
-  var buttons = document.getElementsByTagName("BUTTON");
-  var buttonFound = false;
+  let i;
+  let buttons = document.getElementsByTagName("BUTTON");
+  let buttonFound = false;
   for (i = 0; i < buttons.length; i++) {
-    var buttonHTML = buttons[i].innerHTML;
+    let buttonHTML = buttons[i].innerHTML;
     //console.log(buttonHTML);
     if (buttonHTML == "Click to Give - it's FREE!") {
       buttonFound = true;
@@ -47,27 +47,27 @@
     }
   }
   if (buttonFound) {
-    var millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
+    let millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
     setTimeout(function(){buttons[i].click()}, millisecondsToClick);
     return;
   }
 
   // On thanks site, choose new site if not all are already clicked.
-  var links = document.getElementsByTagName("A");
+  let links = document.getElementsByTagName("A");
   for (i = 0; i < links.length; i++) {
-    var linkClass = links[i].className;
+    let linkClass = links[i].className;
     //console.log(linkClass);
-    var linkAttributes = links[i].attributes[0]
+    let linkAttributes = links[i].attributes[0]
     //console.log(linkAttributes);
     if (linkAttributes === undefined) {
       continue;
     }
-    var linkValue = linkAttributes.value;
+    let linkValue = linkAttributes.value;
     //console.log(linkValue);
     if (linkClass.includes("-site col-4 button-to-count")
         && !linkClass.includes("click-more-clickAttempted")
         && linkValue.startsWith("/clicktogive/")) {
-      var link = links[i].href;
+      let link = links[i].href;
       //console.log(link);
       window.open(link, "_top");
       return;
@@ -75,6 +75,6 @@
   }
 
   // Wait for specified time, then reload page to click through again.
-  var intervalMilliseconds = (INTERVAL_MINUTES + 1) * 60 * 1000;
+  let intervalMilliseconds = (INTERVAL_MINUTES + 1) * 60 * 1000;
   setTimeout(function(){location.reload(true);}, intervalMilliseconds);
 })();
