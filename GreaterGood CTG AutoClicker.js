@@ -5,7 +5,7 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        2.1.1
+// @version        3.0.0
 // @copyright      2023+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
@@ -13,66 +13,66 @@
 // @namespace      https://github.com/Rsge
 // @homepageURL    https://github.com/Rsge/GreaterGood-CTG-AutoClicker
 // @supportURL     https://github.com/Rsge/GreaterGood-CTG-AutoClicker/issues
-// @updateURL      https://greasyfork.org/scripts/433055-greatergood-ctg-autoclicker/code/GreaterGood%20CTG%20AutoClicker.user.js
-// @downloadURL    https://greasyfork.org/scripts/433055-greatergood-ctg-autoclicker/code/GreaterGood%20CTG%20AutoClicker.user.js
 
-// @match          https://greatergood.com/clicktogive/*
-// @match          https://greatergood.com/clickToGive/*
-// @match          https://*.greatergood.com/clicktogive/*
-// @match          https://*.greatergood.com/clickToGive/*
+// @match          https://greatergood.com/*
+// @match          https://theanimalrescuesite.com/*
 
 // @run-at         document-idle
 // @grant          none
 // ==/UserScript==
 
-(function () {
+(async function () {
   'use strict';
 
   // Max amount of seconds to wait before clicking button
-  const MAX_RANDOM_TO_CLICK_SECONDS = 3;
+  const MAX_RANDOM_TO_CLICK_SECONDS = 4;
+  // Amount of seconds to wait for site to load after click
+  const WAIT_SECONDS = 3
   // Minutes between possible click-throughs
   const INTERVAL_MINUTES = 120;
 
+  // Basic function
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
 
-  // On button site, click button.
+  // Vars
   let i;
-  let buttons = document.getElementsByTagName("BUTTON");
-  let buttonFound = false;
-  for (i = 0; i < buttons.length; i++) {
-    let buttonHTML = buttons[i].innerHTML;
-    //console.log(buttonHTML);
-    if (buttonHTML == "Click to Give - it's FREE!") {
-      buttonFound = true;
-      break;
+  let progButtonsLeft = true;
+  do {
+    // On button site, click button.
+    let ctgButton = document.getElementById("ctg-click-box-button");
+    if (ctgButton !== null) {
+      let millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
+      await sleep(millisecondsToClick);
+      ctgButton.click();
     }
-  }
-  if (buttonFound) {
-    let millisecondsToClick = (Math.floor(Math.random() * MAX_RANDOM_TO_CLICK_SECONDS) + 1) * 1000;
-    setTimeout(function(){buttons[i].click()}, millisecondsToClick);
-    return;
-  }
-
-  // On thanks site, choose new site if not all are already clicked.
-  let links = document.getElementsByTagName("A");
-  for (i = 0; i < links.length; i++) {
-    let linkClass = links[i].className;
-    //console.log(linkClass);
-    let linkAttributes = links[i].attributes[0]
-    //console.log(linkAttributes);
-    if (linkAttributes === undefined) {
-      continue;
-    }
-    let linkValue = linkAttributes.value;
-    //console.log(linkValue);
-    if (linkClass.includes("-site col-4 button-to-count")
-        && !linkClass.includes("click-more-clickAttempted")
-        && linkValue.startsWith("/clicktogive/")) {
-      let link = links[i].href;
-      //console.log(link);
-      window.open(link, "_top");
-      return;
-    }
-  }
+    let progButtons = [];
+    // Wait for buttons to load.
+    do {
+      await sleep(WAIT_SECONDS * 1000)
+      progButtonsLeft = true;
+      // On thanks site, choose new site if not all are already clicked.
+      progButtons = document.getElementsByClassName("ctg-click-grid-button");
+      let foundButton = false;
+      for (i = 0; i < progButtons.length; i++) {
+        let progButtonClass = progButtons[i].className;
+        //console.log(progButtonClass);
+        let progButtonValue = progButtons[i].attributes[0].value;
+        //console.log(progButtonValue);
+        if (!progButtonClass.includes("click-attempted") // Button clicked already
+            && !progButtonValue.startsWith("http")) { // Is external site
+          progButtons[i].click();
+          foundButton = true;
+          break;
+        }
+      }
+      if (foundButton) {
+        break;
+      }
+      progButtonsLeft = false;
+    } while (progButtons.length == 0)
+  } while (progButtonsLeft)
 
   // Wait for specified time, then reload page to click through again.
   let intervalMilliseconds = (INTERVAL_MINUTES + 1) * 60 * 1000;
