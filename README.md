@@ -6,6 +6,6 @@ The script can work in the background of a pinned tab, but **the tab has to some
 
 It starts at the top left and works through the complete list to the bottom right, leaving out the external links besides the main *GreaterGood* sites.
 
-The *click*-action is used on the buttons after the page loads plus a random delay, so they should be correctly counted as clicked, if they don't do an isTrusted check somewhere.
+The `click()` method is used on the buttons after the page loads plus a random delay, so they should be correctly counted as clicked, if they don't do an `isTrusted` check somewhere.
 
 Don't forget to **disable your ad blocker** for the site, so ads can get loaded and as such revenue be made.
