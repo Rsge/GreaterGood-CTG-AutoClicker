@@ -5,7 +5,7 @@
 // @description    Automatically clicks through all the buttons on all subsites of the GreaterGood ClickToGive program every two hours.
 // @description:de Klickt sich automatisch alle zwei Std. durch alle Buttons auf allen Seiten des GreaterGood-ClickToGive-Programms.
 
-// @version        3.2.1
+// @version        3.2.2
 // @copyright      2023+, Jan G. (Rsge)
 // @license        Mozilla Public License 2.0
 // @icon           https://http-aws.greatergood.com/img/ggc/favicon-96x96.png
@@ -37,6 +37,8 @@
   const MAX_TRIES = 5;
   // Minutes between possible click-throughs
   const INTERVAL_MINUTES = 120;
+  // Alert about HCaptcha being needed for login.
+  const HCAPTCHA_ALERT = "This site is HCaptcha-secured.\nPlease click on one of the textboxes to trigger it and continue the login and autoclicking process.";
   // Warning for buttons not found
   const BUTTONS_NOT_FOUND_WARNING = "Buttons could not be found after " + (MAX_TRIES * WAIT_SECONDS) + " s.";
 
@@ -70,6 +72,10 @@
     if (url.pathname == "/account/login") {
       // Login site
       // Log in.
+      function isCaptchaTriggered() {return document.getElementById("shop-hcaptcha-badge-container");}
+      if (!isCaptchaTriggered()) {
+        alert(HCAPTCHA_ALERT);
+      }
       let buttons = document.getElementsByTagName("BUTTON");
       let loginButton;
       for (const button of buttons) {
@@ -81,6 +87,9 @@
       //let emailInput = document.getElementById("CustomerEmail");
       let pwdInput = document.getElementById("CustomerPassword");
       await sleep(sToMs(WAIT_SECONDS));
+      while (!isCaptchaTriggered()) {
+        await sleep(sToMs(WAIT_SECONDS));
+      }
       checkPwdLogin(pwdInput, loginButton);
       return;
     } else if (url.pathname == "/account") {
